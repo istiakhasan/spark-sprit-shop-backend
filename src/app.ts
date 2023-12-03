@@ -4,5 +4,7 @@ const app: Application = express()
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-asdf 
+app.get('/', (req, res) => {
+  res.send('abc')
+})
 export default app
