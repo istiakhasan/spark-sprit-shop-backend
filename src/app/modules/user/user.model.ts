@@ -55,6 +55,9 @@ const userSchema = new Schema<IUser>(
     post_code: {
       type: String,
     },
+    delivery_address: {
+      type: String,
+    },
   },
   {
     timestamps: true,

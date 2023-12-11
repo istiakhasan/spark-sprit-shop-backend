@@ -14,6 +14,7 @@ export type IUser = {
   country: { label: string; value: string }
   city: string
   post_code?: string
+  delivery_address?: string
 }
 
 type IUserMethods = {

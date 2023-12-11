@@ -1,4 +1,3 @@
-
 // export const findLastStudentId = async () => {
 //     const lastStudent = await User.findOne(
 //       {
@@ -23,13 +22,12 @@
 //     incrementedId = `${academicSemester?.year.substring(2)}${
 //       academicSemester?.code
 //     }${incrementedId}`
-  
+
 //     return incrementedId
 //   }
-const a=123
-const b=a.toString().padStart(4,0) 
-console.log(b);
+const a = 123
+const b = a.toString().padStart(4, 0)
+console.log(b)
 
-
-const c="adfadfasdf".substring(4)
-console.log(c);
+const c = 'adfadfasdf'.substring(4)
+console.log(c)

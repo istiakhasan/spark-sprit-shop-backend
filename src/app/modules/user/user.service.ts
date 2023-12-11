@@ -5,6 +5,7 @@ import { User } from './user.model'
 import { jwtHelpers } from '../../../helpers/jwtHelpers'
 import config from '../../../config'
 import { Secret } from 'jsonwebtoken'
+import { genarateCustomerId } from './user.util'
 
 const createUser = async (data: IUser) => {
   if (!data.role) {
@@ -12,30 +13,12 @@ const createUser = async (data: IUser) => {
   }
   const { userId, role, phone } = data
   const isUserExist = await User.findOne({ email: data.email })
-  //   generate customer id
-  const findLastCustomer = await User.findOne(
-    {
-      role: 'customer',
-    },
-    { userId: 1, _id: 0 },
-  ).sort({ createdAt: -1 })
-
-  const lastCustomerId = findLastCustomer
-    ? findLastCustomer?.userId?.substring(6)
-    : undefined
-  const currentId = lastCustomerId || (0).toString().padStart(5, '0')
-  console.log(findLastCustomer)
-  const incrementedId = (parseInt(currentId) + 1).toString().padStart(5, '0')
-  //20 25
-  const finalId = `c-${new Date()
-    .getFullYear()
-    .toString()
-    .substring(2)}${new Date().getMonth()}${incrementedId}`
-  data.userId = finalId
   if (isUserExist) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'User already exist')
   }
-
+  //   generate customer id
+  const finalId = await genarateCustomerId(data.role)
+  data.userId = finalId
   const accessToken = jwtHelpers.createToken(
     { userId, role, phone },
     config.secret as Secret,
@@ -53,7 +36,34 @@ const createUser = async (data: IUser) => {
     user,
   }
 }
+const login = async (data: { phone: string; password: string }) => {
+  const isUserExist = await User.findOne({ phone: data.phone })
+  if (!isUserExist) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'User not exist')
+  }
+
+  // const { id: userId, email, password: savePassword, role } = isUserExist;
+  const { userId, phone, password: savePassword, role } = isUserExist
+  const accessToken = jwtHelpers.createToken(
+    { userId, role, phone },
+    config.secret as Secret,
+    config.expires_in as string,
+  )
+  const refreshToken = jwtHelpers.createToken(
+    { userId, role, phone },
+    config.refresh_secret as Secret,
+    config.refresh_expires_in as string,
+  )
+  if (data.password !== savePassword) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Password is incorrect')
+  }
+  return {
+    accessToken,
+    refreshToken,
+  }
+}
 
 export const userService = {
   createUser,
+  login,
 }

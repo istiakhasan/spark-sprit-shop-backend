@@ -23,7 +23,23 @@ const createUser = catchAsync(async (req: Request, res: Response) => {
     },
   })
 })
+const login = catchAsync(async (req: Request, res: Response) => {
+  const result = await userService.login(req.body)
+  const cookieOptions = {
+    secure: config.env === 'production',
+    httpOnly: true,
+  }
+
+  res.cookie('refreshToken', result.refreshToken, cookieOptions)
+  sendResponse(res, {
+    message: 'Login successfull',
+    statusCode: httpStatus.OK,
+    success: true,
+    data: { token: result.accessToken },
+  })
+})
 
 export const userController = {
   createUser,
+  login,
 }
