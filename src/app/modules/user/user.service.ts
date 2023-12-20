@@ -6,6 +6,7 @@ import { jwtHelpers } from '../../../helpers/jwtHelpers'
 import config from '../../../config'
 import { Secret } from 'jsonwebtoken'
 import { genarateCustomerId } from './user.util'
+import bcrypt from 'bcrypt'
 
 const createUser = async (data: IUser) => {
   if (!data.role) {
@@ -41,8 +42,6 @@ const login = async (data: { phone: string; password: string }) => {
   if (!isUserExist) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'User not exist')
   }
-
-  // const { id: userId, email, password: savePassword, role } = isUserExist;
   const { userId, phone, password: savePassword, role } = isUserExist
   const accessToken = jwtHelpers.createToken(
     { userId, role, phone },
@@ -54,7 +53,7 @@ const login = async (data: { phone: string; password: string }) => {
     config.refresh_secret as Secret,
     config.refresh_expires_in as string,
   )
-  if (data.password !== savePassword) {
+  if (!bcrypt.compare(data.password, savePassword)) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Password is incorrect')
   }
   return {

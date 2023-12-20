@@ -7,7 +7,7 @@ type IResponse<T> = {
   meta?: {
     page: number
     limit: number
-    count: number
+    total: number
   }
   data: T
 }
