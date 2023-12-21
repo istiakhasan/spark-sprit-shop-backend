@@ -22,6 +22,8 @@ const getAll = catchAsync(async (req: Request, res: Response) => {
     'searchTerm',
     'price',
     'category',
+    'colors',
+    'brands',
   ])
   const options = pick(req.query, ['page', 'limit', 'sortBy', 'sortOrder'])
   const result = await productService.getAll(options, filters)
