@@ -35,8 +35,28 @@ const getAll = catchAsync(async (req: Request, res: Response) => {
     data: result.data,
   })
 })
+const deleteProduct = catchAsync(async (req: Request, res: Response) => {
+  const result = await productService.deleteProduct(req.params.id as string)
+  sendResponse(res, {
+    message: 'Product Deleted successfully',
+    statusCode: httpStatus.OK,
+    success: true,
+    data: result,
+  })
+})
+const getsingleProduct = catchAsync(async (req: Request, res: Response) => {
+  const result = await productService.getsingleProduct(req.params.id as string)
+  sendResponse(res, {
+    message: 'Product retrive  successfully',
+    statusCode: httpStatus.OK,
+    success: true,
+    data: result,
+  })
+})
 
 export const productController = {
   createProduct,
   getAll,
+  deleteProduct,
+  getsingleProduct,
 }

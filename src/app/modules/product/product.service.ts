@@ -3,6 +3,8 @@ import { SortOrder } from 'mongoose'
 import { paginationHelpers } from '../../../helpers/paginationHelper'
 import { IProduct } from './product.interface'
 import { Product } from './product.schema'
+import ApiError from '../../../errors/ApiError'
+import httpStatus from 'http-status'
 type IPagination = {
   page?: number
   limit?: number
@@ -161,7 +163,24 @@ const getAll = async (options: IPagination, filters: any) => {
   }
 }
 
+const deleteProduct = async (id: string) => {
+  console.log(id)
+
+  return id
+}
+const getsingleProduct = async (id: string) => {
+  const result = await Product.findById(id)
+    .populate('categoryId')
+    .populate('userId')
+    .populate('brand')
+  if (!result) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Product not exist')
+  }
+  return result
+}
 export const productService = {
   createProduct,
   getAll,
+  deleteProduct,
+  getsingleProduct,
 }
