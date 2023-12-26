@@ -53,10 +53,22 @@ const getsingleProduct = catchAsync(async (req: Request, res: Response) => {
     data: result,
   })
 })
+const similarProduct = catchAsync(async (req: Request, res: Response) => {
+  const result = await productService.similarProduct(
+    req.params.categoryid as string,
+  )
+  sendResponse(res, {
+    message: 'Similar Product retrive  successfully',
+    statusCode: httpStatus.OK,
+    success: true,
+    data: result,
+  })
+})
 
 export const productController = {
   createProduct,
   getAll,
   deleteProduct,
   getsingleProduct,
+  similarProduct,
 }

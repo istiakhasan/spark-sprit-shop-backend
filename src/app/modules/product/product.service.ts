@@ -178,9 +178,21 @@ const getsingleProduct = async (id: string) => {
   }
   return result
 }
+const similarProduct = async (id: string) => {
+  console.log(id, 'id')
+  const result = await Product.find({ categoryId: id })
+    .populate('categoryId')
+    .populate('userId')
+    .populate('brand')
+  if (!result) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Product not exist')
+  }
+  return result
+}
 export const productService = {
   createProduct,
   getAll,
   deleteProduct,
   getsingleProduct,
+  similarProduct,
 }
