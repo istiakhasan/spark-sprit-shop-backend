@@ -165,9 +165,12 @@ const getAll = async (options: IPagination, filters: any) => {
 }
 
 const deleteProduct = async (id: string) => {
-  console.log(id)
-
-  return id
+  const isExist = await Product.findById(id)
+  if (!isExist) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Product is not in database')
+  }
+  const result = await Product.deleteOne({ _id: id })
+  return result
 }
 const getsingleProduct = async (id: string) => {
   const result = await Product.findById(id)
@@ -180,7 +183,6 @@ const getsingleProduct = async (id: string) => {
   return result
 }
 const similarProduct = async (id: string) => {
-  console.log(id, 'id')
   const result = await Product.find({ categoryId: id })
     .populate('categoryId')
     .populate('userId')
