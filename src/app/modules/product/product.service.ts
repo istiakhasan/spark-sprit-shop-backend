@@ -5,6 +5,7 @@ import { IProduct } from './product.interface'
 import { Product } from './product.schema'
 import ApiError from '../../../errors/ApiError'
 import httpStatus from 'http-status'
+import { JwtPayload } from 'jsonwebtoken'
 type IPagination = {
   page?: number
   limit?: number
@@ -189,10 +190,17 @@ const similarProduct = async (id: string) => {
   }
   return result
 }
+const getProductByUserId = async (user: JwtPayload | null) => {
+  const result = await Product.find({ userId: user?._id }).sort({
+    createdAt: -1,
+  })
+  return result
+}
 export const productService = {
   createProduct,
   getAll,
   deleteProduct,
   getsingleProduct,
   similarProduct,
+  getProductByUserId,
 }

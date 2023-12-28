@@ -13,7 +13,17 @@ const createBrand = catchAsync(async (req: Request, res: Response) => {
     data: result,
   })
 })
+const getBrand = catchAsync(async (req: Request, res: Response) => {
+  const result = await brandService.getBrand()
+  sendResponse(res, {
+    message: 'Brand retrived successfully',
+    statusCode: httpStatus.OK,
+    success: true,
+    data: result,
+  })
+})
 
 export const brandController = {
   createBrand,
+  getBrand,
 }

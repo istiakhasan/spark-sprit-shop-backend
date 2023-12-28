@@ -15,6 +15,7 @@ const createProduct = catchAsync(async (req: Request, res: Response) => {
   })
 })
 const getAll = catchAsync(async (req: Request, res: Response) => {
+  console.log('1')
   const filters = pick(req.query, [
     'minPrice',
     'maxPrice',
@@ -54,11 +55,22 @@ const getsingleProduct = catchAsync(async (req: Request, res: Response) => {
   })
 })
 const similarProduct = catchAsync(async (req: Request, res: Response) => {
+  console.log('1')
   const result = await productService.similarProduct(
     req.params.categoryid as string,
   )
   sendResponse(res, {
     message: 'Similar Product retrive  successfully',
+    statusCode: httpStatus.OK,
+    success: true,
+    data: result,
+  })
+})
+const getProductByUserId = catchAsync(async (req: Request, res: Response) => {
+  console.log('======================================')
+  const result = await productService.getProductByUserId(req.user)
+  sendResponse(res, {
+    message: ' Product retrive  successfully',
     statusCode: httpStatus.OK,
     success: true,
     data: result,
@@ -71,4 +83,5 @@ export const productController = {
   deleteProduct,
   getsingleProduct,
   similarProduct,
+  getProductByUserId,
 }

@@ -20,17 +20,19 @@ const createUser = async (data: IUser) => {
   //   generate customer id
   const finalId = await genarateCustomerId(data.role)
   data.userId = finalId
+  const user = await User.create(data)
+  const { _id } = user
   const accessToken = jwtHelpers.createToken(
-    { userId, role, phone },
+    { userId, role, phone, _id },
     config.secret as Secret,
     config.expires_in as string,
   )
   const refreshToken = jwtHelpers.createToken(
-    { userId, role, phone },
+    { userId, role, phone, _id },
     config.refresh_secret as Secret,
     config.refresh_expires_in as string,
   )
-  const user = await User.create(data)
+
   return {
     accessToken,
     refreshToken,
@@ -42,14 +44,14 @@ const login = async (data: { phone: string; password: string }) => {
   if (!isUserExist) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'User not exist')
   }
-  const { userId, phone, password: savePassword, role } = isUserExist
+  const { userId, phone, password: savePassword, role, _id } = isUserExist
   const accessToken = jwtHelpers.createToken(
-    { userId, role, phone },
+    { userId, role, phone, _id },
     config.secret as Secret,
     config.expires_in as string,
   )
   const refreshToken = jwtHelpers.createToken(
-    { userId, role, phone },
+    { userId, role, phone, _id },
     config.refresh_secret as Secret,
     config.refresh_expires_in as string,
   )
