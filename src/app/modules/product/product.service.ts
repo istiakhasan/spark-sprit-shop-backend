@@ -192,11 +192,47 @@ const similarProduct = async (id: string) => {
   }
   return result
 }
-const getProductByUserId = async (user: JwtPayload | null) => {
-  const result = await Product.find({ userId: user?._id }).sort({
-    createdAt: -1,
-  })
-  return result
+const getProductByUserId = async (
+  user: JwtPayload | null,
+  options: IPagination,
+  filters: any,
+) => {
+  const { limit, page, skip, sortBy, sortOrder } =
+    paginationHelpers.calculatePagination(options)
+  const sortConditions: { [key: string]: SortOrder } = {}
+  if (sortBy && sortOrder) {
+    sortConditions[sortBy] = sortOrder === 'desc' ? -1 : 1
+  }
+
+  const { searchTerm } = filters
+  const andCondition = []
+  if (searchTerm) {
+    andCondition.push({
+      $or: ['name'].map(field => ({
+        [field]: {
+          $regex: searchTerm,
+          $options: 'i',
+        },
+      })),
+    })
+  }
+
+  andCondition.push({ userId: user?._id })
+
+  const whereConditions = andCondition.length > 0 ? { $and: andCondition } : {}
+  const result = await Product.find(whereConditions)
+    .sort(sortConditions)
+    .skip(skip)
+    .limit(limit)
+  const total = await Product.countDocuments(whereConditions)
+  return {
+    meta: {
+      page,
+      limit,
+      total,
+    },
+    data: result,
+  }
 }
 export const productService = {
   createProduct,

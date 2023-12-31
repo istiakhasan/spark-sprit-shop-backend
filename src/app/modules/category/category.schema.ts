@@ -10,9 +10,16 @@ const categorySchema = new Schema<ICategory>(
     },
     image: {
       type: String,
+      required: true,
     },
     status: {
       type: String,
+      required: true,
+    },
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
     },
   },
   {

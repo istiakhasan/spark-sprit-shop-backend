@@ -65,12 +65,19 @@ const similarProduct = catchAsync(async (req: Request, res: Response) => {
   })
 })
 const getProductByUserId = catchAsync(async (req: Request, res: Response) => {
-  const result = await productService.getProductByUserId(req.user)
+  const filters = pick(req.query, ['searchTerm'])
+  const options = pick(req.query, ['page', 'limit', 'sortBy', 'sortOrder'])
+  const result = await productService.getProductByUserId(
+    req.user,
+    options,
+    filters,
+  )
   sendResponse(res, {
     message: ' Product retrive  successfully',
     statusCode: httpStatus.OK,
     success: true,
-    data: result,
+    meta: result.meta,
+    data: result.data,
   })
 })
 
