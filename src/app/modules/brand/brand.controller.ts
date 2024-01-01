@@ -3,6 +3,7 @@ import catchAsync from '../../../shared/catchAsync'
 import sendResponse from '../../../shared/sendResponse'
 import httpStatus from 'http-status'
 import { brandService } from './brand.service'
+import pick from '../../../shared/pick'
 
 const createBrand = catchAsync(async (req: Request, res: Response) => {
   const result = await brandService.createBrand(req.body)
@@ -23,7 +24,21 @@ const getBrand = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
+const getById = catchAsync(async (req: Request, res: Response) => {
+  const filters = pick(req.query, ['searchTerm'])
+  const options = pick(req.query, ['page', 'limit', 'sortBy', 'sortOrder'])
+  const result = await brandService.getById(req.user, options, filters)
+  sendResponse(res, {
+    message: ' Brand retrive  successfully',
+    statusCode: httpStatus.OK,
+    success: true,
+    meta: result.meta,
+    data: result.data,
+  })
+})
+
 export const brandController = {
   createBrand,
   getBrand,
+  getById,
 }

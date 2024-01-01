@@ -3,6 +3,7 @@ import { UserRouter } from '../modules/user/user.route'
 import { ProductRouter } from '../modules/product/product.route'
 import { CategoryRouter } from '../modules/category/category.route'
 import { brandRouter } from '../modules/brand/brand.route'
+import { reviewRouter } from '../modules/review/review.route'
 
 const router = express.Router()
 
@@ -22,6 +23,10 @@ const moduleRoutes = [
   {
     path: '/brand',
     route: brandRouter,
+  },
+  {
+    path: '/review',
+    route: reviewRouter,
   },
 ]
 
