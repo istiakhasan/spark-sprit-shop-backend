@@ -11,4 +11,5 @@ const router = express_1.default.Router();
 router.post('/create', review_controller_1.reviewController.createReview);
 // router.get('/get-all', categoryController.getAllCategory)
 router.get('/getbyProductid/:id', review_controller_1.reviewController.getbyProductid);
+router.get('/totalRating/:id', review_controller_1.reviewController.totalRating);
 exports.reviewRouter = router;

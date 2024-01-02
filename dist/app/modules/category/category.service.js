@@ -13,7 +13,6 @@ exports.categoryService = void 0;
 const category_schema_1 = require("./category.schema");
 const paginationHelper_1 = require("../../../helpers/paginationHelper");
 const createCategory = (data) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(data, 'data');
     const result = yield category_schema_1.Category.create(data);
     return result;
 });

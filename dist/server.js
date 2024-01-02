@@ -21,7 +21,7 @@ process.on('uncaughtException', error => {
 });
 let server;
 process.on('uncaughtException', error => {
-    console.log("Uncaught exception is detected...", error);
+    console.log('Uncaught exception is detected...', error);
     process.exit(1);
 });
 function abc() {
@@ -37,7 +37,7 @@ function abc() {
             console.log('Failed to connect database', err);
         }
         process.on('unhandledRejection', error => {
-            console.log("Unhandled Rejection we are closing our server", error);
+            console.log('Unhandled Rejection we are closing our server', error);
             if (server) {
                 server.close(() => {
                     process.exit(1);

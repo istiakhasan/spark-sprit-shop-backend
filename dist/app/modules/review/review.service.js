@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.reviewService = void 0;
 const paginationHelper_1 = require("../../../helpers/paginationHelper");
 const review_schema_1 = require("./review.schema");
+const mongodb_1 = require("mongodb");
 const createReview = (data) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield review_schema_1.Review.create(data);
     return result;
@@ -31,16 +32,41 @@ const getbyProductid = (id, options) => __awaiter(void 0, void 0, void 0, functi
         .limit(limit)
         .populate('userId productId');
     const total = yield review_schema_1.Review.countDocuments(whereConditions);
+    const ratingAggregation = yield review_schema_1.Review.aggregate([
+        { $match: whereConditions },
+        {
+            $group: {
+                _id: null,
+                ratingSum: { $sum: '$rating' },
+            },
+        },
+    ]);
+    const totalRating = ratingAggregation;
     return {
         meta: {
             page,
             limit,
             total,
+            totalRating,
         },
         data: result,
     };
 });
+const totalRating = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield review_schema_1.Review.aggregate([
+        { $match: { productId: new mongodb_1.ObjectId(id) } },
+        {
+            $group: {
+                _id: null,
+                rating: { $sum: '$rating' },
+                totalReviewer: { $sum: 1 },
+            },
+        },
+    ]);
+    return result;
+});
 exports.reviewService = {
     createReview,
     getbyProductid,
+    totalRating,
 };
