@@ -7,7 +7,6 @@ import { IPagination } from '../../../interface/commonInterface'
 import { JwtPayload } from 'jsonwebtoken'
 
 const createCategory = async (data: ICategory) => {
-  console.log(data, 'data')
   const result = await Category.create(data)
   return result
 }

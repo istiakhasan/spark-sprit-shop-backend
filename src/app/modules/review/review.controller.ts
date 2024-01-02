@@ -26,15 +26,23 @@ const createReview = catchAsync(async (req: Request, res: Response) => {
 // })
 
 const getbyProductid = catchAsync(async (req: Request, res: Response) => {
-  console.log(req.query, 'query')
   const options = pick(req.query, ['page', 'limit', 'sortBy', 'sortOrder'])
   const result = await reviewService.getbyProductid(req.params.id, options)
   sendResponse(res, {
-    message: ' Category retrive  successfully',
+    message: ' Comment retrive  successfully',
     statusCode: httpStatus.OK,
     success: true,
     meta: result.meta,
     data: result.data,
+  })
+})
+const totalRating = catchAsync(async (req: Request, res: Response) => {
+  const result = await reviewService.totalRating(req.params.id)
+  sendResponse(res, {
+    message: ' Review retrive  successfully',
+    statusCode: httpStatus.OK,
+    success: true,
+    data: result,
   })
 })
 
@@ -42,4 +50,5 @@ export const reviewController = {
   createReview,
   // getAllCategory,
   getbyProductid,
+  totalRating,
 }

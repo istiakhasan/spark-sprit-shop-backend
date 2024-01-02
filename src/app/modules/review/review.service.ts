@@ -4,6 +4,7 @@ import { paginationHelpers } from '../../../helpers/paginationHelper'
 import { IPagination } from '../../../interface/commonInterface'
 import { IReview } from './review.interface'
 import { Review } from './review.schema'
+import { ObjectId } from 'mongodb'
 
 const createReview = async (data: IReview) => {
   const result = await Review.create(data)
@@ -29,17 +30,43 @@ const getbyProductid = async (id: string, options: IPagination) => {
     .limit(limit)
     .populate('userId productId')
   const total = await Review.countDocuments(whereConditions)
+
+  const ratingAggregation = await Review.aggregate([
+    { $match: whereConditions },
+    {
+      $group: {
+        _id: null,
+        ratingSum: { $sum: '$rating' },
+      },
+    },
+  ])
+  const totalRating = ratingAggregation
   return {
     meta: {
       page,
       limit,
       total,
+      totalRating,
     },
     data: result,
   }
+}
+const totalRating = async (id: string) => {
+  const result = await Review.aggregate([
+    { $match: { productId: new ObjectId(id) } },
+    {
+      $group: {
+        _id: null,
+        rating: { $sum: '$rating' },
+        totalReviewer: { $sum: 1 },
+      },
+    },
+  ])
+  return result
 }
 
 export const reviewService = {
   createReview,
   getbyProductid,
+  totalRating,
 }
