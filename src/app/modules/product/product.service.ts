@@ -6,6 +6,7 @@ import { Product } from './product.schema'
 import ApiError from '../../../errors/ApiError'
 import httpStatus from 'http-status'
 import { JwtPayload } from 'jsonwebtoken'
+
 type IPagination = {
   page?: number
   limit?: number
