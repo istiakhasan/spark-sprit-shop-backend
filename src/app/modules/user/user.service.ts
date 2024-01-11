@@ -4,7 +4,7 @@ import { IUser } from './user.interface'
 import { User } from './user.model'
 import { jwtHelpers } from '../../../helpers/jwtHelpers'
 import config from '../../../config'
-import { Secret } from 'jsonwebtoken'
+import { JwtPayload, Secret } from 'jsonwebtoken'
 import { genarateCustomerId } from './user.util'
 import bcrypt from 'bcrypt'
 
@@ -55,7 +55,8 @@ const login = async (data: { phone: string; password: string }) => {
     config.refresh_secret as Secret,
     config.refresh_expires_in as string,
   )
-  if (!bcrypt.compare(data.password, savePassword)) {
+  const isPasswordMatch = await bcrypt.compare(data?.password, savePassword)
+  if (!isPasswordMatch) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Password is incorrect')
   }
   return {
@@ -64,7 +65,15 @@ const login = async (data: { phone: string; password: string }) => {
   }
 }
 
+const getProfileInfo = async (user: JwtPayload | null) => {
+  if (user?._id) {
+    const result = await User.findById(user._id)
+    return result
+  }
+}
+
 export const userService = {
   createUser,
   login,
+  getProfileInfo,
 }

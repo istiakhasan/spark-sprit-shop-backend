@@ -39,6 +39,10 @@ const orderSchema = new Schema<IOrder>(
       type: Number,
       required: true,
     },
+    shipping: {
+      type: Number,
+      default: 0,
+    },
     transition_id: {
       type: String,
       required: true,

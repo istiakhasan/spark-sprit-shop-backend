@@ -15,6 +15,8 @@ export type IUser = {
   city: string
   post_code?: string
   delivery_address?: string
+  date_of_birth?: string
+  gender?: 'male' | 'female'
 }
 
 type IUserMethods = {

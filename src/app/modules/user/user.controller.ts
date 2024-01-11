@@ -38,8 +38,18 @@ const login = catchAsync(async (req: Request, res: Response) => {
     data: { token: result.accessToken },
   })
 })
+const getProfileInfo = catchAsync(async (req: Request, res: Response) => {
+  const result = await userService.getProfileInfo(req.user)
+  sendResponse(res, {
+    message: 'Profile Info retrived successfull',
+    statusCode: httpStatus.OK,
+    success: true,
+    data: result,
+  })
+})
 
 export const userController = {
   createUser,
   login,
+  getProfileInfo,
 }

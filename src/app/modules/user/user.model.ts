@@ -36,6 +36,11 @@ const userSchema = new Schema<IUser>(
       enum: ['admin', 'customer', 'seller', 'super_admin'],
       default: 'customer',
     },
+    gender: {
+      type: String,
+      enum: ['male', 'female'],
+      required: true,
+    },
     bioData: {
       type: String,
     },
@@ -57,6 +62,9 @@ const userSchema = new Schema<IUser>(
       type: String,
     },
     delivery_address: {
+      type: String,
+    },
+    date_of_birth: {
       type: String,
     },
   },

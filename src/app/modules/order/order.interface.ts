@@ -14,4 +14,5 @@ export type IOrder = {
   discount: number
   transition_id: string
   paid: boolean
+  shipping: number
 }
