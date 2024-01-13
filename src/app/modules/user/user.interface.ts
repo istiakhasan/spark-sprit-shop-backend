@@ -1,5 +1,4 @@
 import { Model } from 'mongoose'
-
 export type IUser = {
   userId: string
   name: string
