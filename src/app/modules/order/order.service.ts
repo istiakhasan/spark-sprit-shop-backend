@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ObjectId } from 'mongodb'
 import { User } from '../user/user.model'
-import { IOrder } from './order.interface'
 import { Order } from './order.schema'
 //@ts-ignore
 import SSLCommerzPayment from 'sslcommerz-lts'
@@ -17,7 +16,9 @@ import { paginationHelpers } from '../../../helpers/paginationHelper'
 const store_id = 'softp6565d0c57bd38'
 const store_passwd = 'softp6565d0c57bd38@ssl'
 const is_live = false //true for live, false for sandbox
-const createOrder = async (data: IOrder) => {
+const createOrder = async (data: any) => {
+  const newData = { ...data }
+  newData['address'] = data?.address?._id
   const userInfo = await User.findById(data?.customerId)
   const transition_id = new ObjectId().toString()
   const shipData: any = {
@@ -41,12 +42,12 @@ const createOrder = async (data: IOrder) => {
     cus_postcode: '1000',
     cus_country: 'Bangladesh',
     cus_phone: userInfo?.phone,
-    cus_fax: '01711111111',
-    ship_name: 'Customer Name',
+    cus_fax: data?.address?.phone,
+    ship_name: data?.address?.fulName,
     ship_add1: 'Dhaka',
     ship_add2: 'Dhaka',
-    ship_city: 'Dhaka',
-    ship_state: 'Dhaka',
+    ship_city: data?.address?.city,
+    ship_state: data?.address?.province,
     ship_postcode: 1000,
     ship_country: 'Bangladesh',
   }
@@ -56,7 +57,7 @@ const createOrder = async (data: IOrder) => {
   if (res?.status === 'SUCCESS') {
     const session = await mongoose.startSession()
     try {
-      data?.products?.map(async item => {
+      data?.products?.map(async (item: any) => {
         //@ts-ignore
         const id = item?._id
         // find product by _id
@@ -74,17 +75,22 @@ const createOrder = async (data: IOrder) => {
           { new: true, session },
         )
       })
+      await Order.create(
+        [
+          {
+            ...newData,
+            transition_id,
+            paymentStatus: 'paid',
+            paid: false,
+          },
+        ],
+        { session },
+      )
     } catch (error) {
       await session.abortTransaction()
       await session.endSession()
       throw error
     }
-    await Order.create({
-      ...data,
-      transition_id,
-      paymentStatus: 'paid',
-      paid: false,
-    })
   }
 
   return { url: res?.GatewayPageURL }

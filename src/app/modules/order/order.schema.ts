@@ -24,7 +24,8 @@ const orderSchema = new Schema<IOrder>(
       required: true,
     },
     address: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'addressbook',
       required: true,
     },
     discount: {

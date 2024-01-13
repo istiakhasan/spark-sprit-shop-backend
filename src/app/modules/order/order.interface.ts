@@ -9,7 +9,7 @@ export type IOrder = {
   orderStatus: 'pending' | 'processing' | 'shipped' | 'delivered'
   paymentMethod: 'cash on delivery' | 'ssl-commerce'
   paymentStatus: 'pending' | 'paid' | 'refunded'
-  address: string
+  address: Schema.Types.ObjectId
   totalPrice: number
   discount: number
   transition_id: string
