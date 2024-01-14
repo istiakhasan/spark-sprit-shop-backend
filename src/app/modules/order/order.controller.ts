@@ -65,6 +65,7 @@ const updateStatus = catchAsync(async (req: Request, res: Response) => {
   const result = await orderService.updateStatus(
     req.query.status as string,
     req.params.id,
+    req.query.userId as string,
   )
   sendResponse(res, {
     message: ' Status updated  successfully',

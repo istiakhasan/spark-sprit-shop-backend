@@ -13,6 +13,7 @@ import httpStatus from 'http-status'
 import { JwtPayload } from 'jsonwebtoken'
 import { IPagination } from '../../../interface/commonInterface'
 import { paginationHelpers } from '../../../helpers/paginationHelper'
+import { OrderLog } from '../orderlog/orderlog.model'
 const store_id = 'softp6565d0c57bd38'
 const store_passwd = 'softp6565d0c57bd38@ssl'
 const is_live = false //true for live, false for sandbox
@@ -100,7 +101,23 @@ const paymentSuccess = async (id: string) => {
     { transition_id: id },
     { paid: true },
     { new: true },
-  )
+  ).populate('address')
+
+  const logData = {
+    orderId: order?._id,
+    log: [
+      {
+        status: order?.orderStatus,
+        date: new Date(),
+        // @ts-ignore
+        address: `${order?.address?.province}-${order?.address?.city}-${order?.address?.area}-${order?.address?.address}`,
+      },
+    ],
+  }
+
+  console.log(logData, 'log data')
+
+  await OrderLog.create(logData)
   return order
 }
 const orderSummary = async (id: string) => {
@@ -187,6 +204,8 @@ const getAllOrders = async (
     andCondition.push({ orderStatus: 'shipped' })
   } else if (status && status === '4') {
     andCondition.push({ orderStatus: 'delivered' })
+  } else if (status && status === '5') {
+    andCondition.push({ orderStatus: 'approved' })
   }
 
   // andCondition.push({ customerId: user?._id })
@@ -207,22 +226,39 @@ const getAllOrders = async (
   }
 }
 
-const updateStatus = async (status: string, id: string) => {
+const updateStatus = async (status: string, id: string, userId: string) => {
   if (status === 'pending') {
+    status = 'approved'
+  } else if (status === 'approved') {
     status = 'processing'
   } else if (status === 'processing') {
     status = 'shipped'
   } else if (status === 'shipped') {
     status = 'delivered'
   }
-  console.log(status, 'status')
+  const findUser = await User.findById(userId)
   const result = await Order.findOneAndUpdate(
     { _id: id },
     {
       orderStatus: status,
     },
     { new: true },
+  ).populate('')
+
+  const logData = {
+    status: status,
+    date: new Date(),
+    // @ts-ignore
+    address: `${findUser?.city}-${findUser?.post_code} , ${findUser?.country?.label}`,
+  }
+
+  await OrderLog.updateOne(
+    { orderId: result?._id },
+    {
+      $push: { ['log']: logData },
+    },
   )
+
   return result
 }
 

@@ -6,7 +6,7 @@ export type ExtendedInterface = IProduct & {
 export type IOrder = {
   customerId: Schema.Types.ObjectId
   products: ExtendedInterface[]
-  orderStatus: 'pending' | 'processing' | 'shipped' | 'delivered'
+  orderStatus: 'pending' | 'approved' | 'processing' | 'shipped' | 'delivered'
   paymentMethod: 'cash on delivery' | 'ssl-commerce'
   paymentStatus: 'pending' | 'paid' | 'refunded'
   address: Schema.Types.ObjectId

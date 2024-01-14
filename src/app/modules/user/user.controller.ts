@@ -47,9 +47,19 @@ const getProfileInfo = catchAsync(async (req: Request, res: Response) => {
     data: result,
   })
 })
+const updateProfile = catchAsync(async (req: Request, res: Response) => {
+  const result = await userService.updateProfile(req.user, req.body)
+  sendResponse(res, {
+    message: 'Profile updated successfull',
+    statusCode: httpStatus.OK,
+    success: true,
+    data: result,
+  })
+})
 
 export const userController = {
   createUser,
   login,
   getProfileInfo,
+  updateProfile,
 }

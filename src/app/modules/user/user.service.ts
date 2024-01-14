@@ -71,9 +71,16 @@ const getProfileInfo = async (user: JwtPayload | null) => {
     return result
   }
 }
+const updateProfile = async (user: JwtPayload | null, data: Partial<IUser>) => {
+  if (user?._id) {
+    const result = await User.findByIdAndUpdate(user._id, data, { new: true })
+    return result
+  }
+}
 
 export const userService = {
   createUser,
   login,
   getProfileInfo,
+  updateProfile,
 }
