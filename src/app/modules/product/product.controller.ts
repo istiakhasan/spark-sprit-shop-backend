@@ -80,6 +80,15 @@ const getProductByUserId = catchAsync(async (req: Request, res: Response) => {
     data: result.data,
   })
 })
+const updateProduct = catchAsync(async (req: Request, res: Response) => {
+  const result = await productService.updateProduct(req.params.id, req.body)
+  sendResponse(res, {
+    message: ' Product update  successfully',
+    statusCode: httpStatus.OK,
+    success: true,
+    data: result,
+  })
+})
 
 export const productController = {
   createProduct,
@@ -88,4 +97,5 @@ export const productController = {
   getsingleProduct,
   similarProduct,
   getProductByUserId,
+  updateProduct,
 }

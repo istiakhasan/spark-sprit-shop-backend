@@ -7,6 +7,8 @@ import { reviewRouter } from '../modules/review/review.route'
 import { OrderRouter } from '../modules/order/order.route'
 import { addressBookRouter } from '../modules/addressBook/addressBook.route'
 import { orderLogRouter } from '../modules/orderlog/orderLog.route'
+import { blogRouter } from '../modules/blog/blog.route'
+import { blogCategoryRouter } from '../modules/blogCategory/blogCategory.route'
 const router = express.Router()
 const moduleRoutes = [
   {
@@ -40,6 +42,14 @@ const moduleRoutes = [
   {
     path: '/orderlog',
     route: orderLogRouter,
+  },
+  {
+    path: '/blog',
+    route: blogRouter,
+  },
+  {
+    path: '/blog-category',
+    route: blogCategoryRouter,
   },
 ]
 

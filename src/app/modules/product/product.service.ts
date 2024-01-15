@@ -222,6 +222,7 @@ const getProductByUserId = async (
 
   const whereConditions = andCondition.length > 0 ? { $and: andCondition } : {}
   const result = await Product.find(whereConditions)
+    .populate('brand categoryId')
     .sort(sortConditions)
     .skip(skip)
     .limit(limit)
@@ -235,6 +236,10 @@ const getProductByUserId = async (
     data: result,
   }
 }
+const updateProduct = async (id: string, data: Partial<IProduct>) => {
+  const result = await Product.findByIdAndUpdate(id, data, { new: true })
+  return result
+}
 export const productService = {
   createProduct,
   getAll,
@@ -242,4 +247,5 @@ export const productService = {
   getsingleProduct,
   similarProduct,
   getProductByUserId,
+  updateProduct,
 }

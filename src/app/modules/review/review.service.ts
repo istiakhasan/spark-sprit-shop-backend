@@ -5,8 +5,20 @@ import { IPagination } from '../../../interface/commonInterface'
 import { IReview } from './review.interface'
 import { Review } from './review.schema'
 import { ObjectId } from 'mongodb'
+import ApiError from '../../../errors/ApiError'
+import httpStatus from 'http-status'
 
 const createReview = async (data: IReview) => {
+  const isAlreadyReviewed = await Review.findOne({
+    productId: data?.productId,
+    userId: data?.userId,
+  })
+  if (isAlreadyReviewed) {
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      'You already review this product',
+    )
+  }
   const result = await Review.create(data)
   return result
 }
