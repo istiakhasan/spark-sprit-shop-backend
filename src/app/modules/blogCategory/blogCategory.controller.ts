@@ -38,9 +38,19 @@ const updateBlogCategory = catchAsync(async (req: Request, res: Response) => {
     data: result,
   })
 })
+const loadAllBlogCategory = catchAsync(async (req: Request, res: Response) => {
+  const result = await blogCategoryService.loadAllBlogCategory()
+  sendResponse(res, {
+    message: ' Blog Category retrived  successfully',
+    statusCode: httpStatus.OK,
+    success: true,
+    data: result,
+  })
+})
 
 export const blogCategoryController = {
   createBlogCategory,
   getAll,
   updateBlogCategory,
+  loadAllBlogCategory,
 }

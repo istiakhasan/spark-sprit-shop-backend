@@ -12,7 +12,7 @@ const createUser = async (data: IUser) => {
   if (!data.role) {
     data.role = 'customer'
   }
-  const { userId, role, phone } = data
+  const { userId, role, phone, image } = data
   const isUserExist = await User.findOne({ email: data.email })
   if (isUserExist) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'User already exist')
@@ -23,7 +23,7 @@ const createUser = async (data: IUser) => {
   const user = await User.create(data)
   const { _id } = user
   const accessToken = jwtHelpers.createToken(
-    { userId, role, phone, _id },
+    { userId, role, phone, _id, image },
     config.secret as Secret,
     config.expires_in as string,
   )
@@ -44,14 +44,21 @@ const login = async (data: { phone: string; password: string }) => {
   if (!isUserExist) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'User not exist')
   }
-  const { userId, phone, password: savePassword, role, _id } = isUserExist
+  const {
+    userId,
+    phone,
+    password: savePassword,
+    role,
+    _id,
+    image,
+  } = isUserExist
   const accessToken = jwtHelpers.createToken(
-    { userId, role, phone, _id },
+    { userId, role, phone, _id, image },
     config.secret as Secret,
     config.expires_in as string,
   )
   const refreshToken = jwtHelpers.createToken(
-    { userId, role, phone, _id },
+    { userId, role, phone, _id, image },
     config.refresh_secret as Secret,
     config.refresh_expires_in as string,
   )

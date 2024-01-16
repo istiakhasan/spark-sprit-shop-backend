@@ -9,6 +9,7 @@ import { addressBookRouter } from '../modules/addressBook/addressBook.route'
 import { orderLogRouter } from '../modules/orderlog/orderLog.route'
 import { blogRouter } from '../modules/blog/blog.route'
 import { blogCategoryRouter } from '../modules/blogCategory/blogCategory.route'
+import { blogCommentRouter } from '../modules/blogComment/blogComment.route'
 const router = express.Router()
 const moduleRoutes = [
   {
@@ -50,6 +51,10 @@ const moduleRoutes = [
   {
     path: '/blog-category',
     route: blogCategoryRouter,
+  },
+  {
+    path: '/blog-comment',
+    route: blogCommentRouter,
   },
 ]
 

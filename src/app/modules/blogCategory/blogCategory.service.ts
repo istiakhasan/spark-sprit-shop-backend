@@ -59,9 +59,15 @@ const updateBlogCategory = async (id: string, data: IBlogCategory) => {
   const result = await BlogCategory.findByIdAndUpdate(id, data, { new: true })
   return result
 }
+const loadAllBlogCategory = async () => {
+  const result = await BlogCategory.find({}).sort({ createdAt: -1 })
+  console.log(result)
+  return result
+}
 
 export const blogCategoryService = {
   createBlogCategory,
   getAll,
   updateBlogCategory,
+  loadAllBlogCategory,
 }
