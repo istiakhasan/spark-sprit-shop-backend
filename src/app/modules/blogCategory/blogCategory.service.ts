@@ -60,8 +60,24 @@ const updateBlogCategory = async (id: string, data: IBlogCategory) => {
   return result
 }
 const loadAllBlogCategory = async () => {
-  const result = await BlogCategory.find({}).sort({ createdAt: -1 })
-  console.log(result)
+  // const result = await BlogCategory.find({}).sort({ createdAt: -1 })
+  const result = await BlogCategory.aggregate([
+    {
+      $lookup: {
+        from: 'blogs',
+        localField: '_id',
+        foreignField: 'category',
+        as: 'product',
+      },
+    },
+    {
+      $addFields: {
+        productLength: { $size: '$product' },
+      },
+    },
+    { $project: { product: 0 } },
+    { $sort: { createdAt: -1 } },
+  ])
   return result
 }
 

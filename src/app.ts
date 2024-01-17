@@ -4,9 +4,8 @@ import httpStatus from 'http-status'
 import globalErrorHandler from './app/middlewares/globalErrorHandler'
 import routes from './app/routes'
 import cookieParser from 'cookie-parser'
-import { getBaseUrl, getLiveServerUrl } from './helpers/envConfig'
+import { getBaseUrl } from './helpers/envConfig'
 const app: Application = express()
-console.log(getLiveServerUrl())
 // app.use(cors({ origin: 'https://spark-spirit-shop.vercel.app', credentials: true }))
 app.use(cors({ origin: getBaseUrl(), credentials: true }))
 app.use(cookieParser())

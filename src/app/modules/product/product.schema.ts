@@ -11,6 +11,7 @@ const productSchema = new Schema<IProduct>(
     categoryId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Category',
+      required: true,
     },
     userId: {
       type: Schema.Types.ObjectId,
@@ -18,6 +19,7 @@ const productSchema = new Schema<IProduct>(
     },
     description: {
       type: String,
+      required: true,
     },
     colors: [
       {
@@ -57,10 +59,12 @@ const productSchema = new Schema<IProduct>(
     },
     image: {
       type: String,
+      required: true,
     },
     brand: {
       type: Schema.Types.ObjectId,
       ref: 'brand',
+      required: true,
     },
   },
   {

@@ -114,9 +114,6 @@ const paymentSuccess = async (id: string) => {
       },
     ],
   }
-
-  console.log(logData, 'log data')
-
   await OrderLog.create(logData)
   return order
 }

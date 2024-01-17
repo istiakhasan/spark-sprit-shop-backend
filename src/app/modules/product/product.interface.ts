@@ -3,7 +3,7 @@ import { Model, Schema } from 'mongoose'
 export type IProduct = {
   name: string
   categoryId: Schema.Types.ObjectId
-  description?: string
+  description: string
   userId: Schema.Types.ObjectId
   colors?: string
   size: string
