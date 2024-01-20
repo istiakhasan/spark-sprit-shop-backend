@@ -11,7 +11,19 @@ const createBrand = async (data: IBrand) => {
   return result
 }
 const getBrand = async () => {
-  const result = await Brand.find()
+  const result = await Brand.aggregate([
+    {
+      $lookup: {
+        from: 'products',
+        localField: '_id',
+        foreignField: 'brand',
+        as: 'brands',
+      },
+    },
+
+    { $addFields: { totalProduct: { $size: '$brands' } } },
+    { $project: { brands: 0 } },
+  ])
   return result
 }
 

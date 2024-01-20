@@ -11,7 +11,24 @@ const createCategory = async (data: ICategory) => {
   return result
 }
 const getAllCategory = async () => {
-  const result = await Category.find().select('name  _id')
+  const result = await Category.aggregate([
+    {
+      $lookup: {
+        from: 'products',
+        localField: '_id',
+        foreignField: 'categoryId',
+        as: 'products',
+      },
+    },
+    {
+      $addFields: {
+        productsCount: { $size: '$products' },
+      },
+    },
+    {
+      $project: { products: 0 },
+    },
+  ])
   return result
 }
 
