@@ -1,13 +1,3 @@
-import express from 'express'
-import { blogCategoryController } from './blogCategory.controller'
-
-const router = express.Router()
-
-router.post('/create', blogCategoryController.createBlogCategory)
-router.get('/get-all', blogCategoryController.getAll)
-router.get('/loadAllBlogCategory', blogCategoryController.loadAllBlogCategory)
-router.patch('/:id', blogCategoryController.updateBlogCategory)
-
 /**
  * @openapi
  * tags:
@@ -135,5 +125,3 @@ router.patch('/:id', blogCategoryController.updateBlogCategory)
  *       '404':
  *         description: Blog category not found
  */
-
-export const blogCategoryRouter = router
