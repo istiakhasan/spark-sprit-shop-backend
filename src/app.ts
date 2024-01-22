@@ -24,22 +24,29 @@ const options = {
     },
     servers: [
       {
-        url: 'http://localhost:5000', // Update with your server URL
-        description: 'Local development server',
-      },
-      {
         url: 'https://spart-spirit-shop-backend.vercel.app', // Update with your server URL
         description: 'Live server',
       },
+      {
+        url: 'http://localhost:5000', // Update with your server URL
+        description: 'Local development server',
+      },
     ],
   },
-  apis: ['./src/app/modules/**/*.route.ts'], // Path to the API route files
+  apis: ['./dist/app/modules/**/*.route.js'], // Path to the API route files
 }
 
 const specs = swaggerJsDoc(options)
-
+const CSS_URL =
+  'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css'
 // Serve Swagger UI
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs))
+// app.use('/api-docs', express.static('./node_modules/swagger-ui-dist/'));
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(specs, { customCssUrl: CSS_URL }),
+)
+
 app.use('/api/v1', routes)
 app.get('/', (req, res) => {
   res.send('successfully run')
