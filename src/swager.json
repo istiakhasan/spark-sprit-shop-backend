@@ -1,22 +1,21 @@
 {
-    "swaggerDefinition": {
-      "openapi": "3.0.0",
-      "info": {
-        "title": "Spark Spirit Shop",
-        "version": "1.0.0",
-        "description": "API documentation for Spark Spirit Shop"
-      },
-      "servers": [
-        {
-          "url": "https://spart-spirit-shop-backend.vercel.app",
-          "description": "Live server"
-        },
-        {
-          "url": "http://localhost:5000",
-          "description": "Local development server"
-        }
-      ]
+  "swaggerDefinition": {
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Spark Spirit Shop",
+      "version": "1.0.0",
+      "description": "API documentation for Spark Spirit Shop"
     },
-    "apis": ["./src/app/modules/**/*.route.ts"]
-  }
-  
+    "servers": [
+      {
+        "url": "https://spart-spirit-shop-backend.vercel.app",
+        "description": "Live server"
+      },
+      {
+        "url": "http://localhost:5000",
+        "description": "Local development server"
+      }
+    ]
+  },
+  "apis": ["./src/app/modules/**/*.route.ts"]
+}
