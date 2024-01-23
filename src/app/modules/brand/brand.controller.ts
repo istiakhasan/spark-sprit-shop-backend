@@ -36,9 +36,18 @@ const getById = catchAsync(async (req: Request, res: Response) => {
     data: result.data,
   })
 })
-
+const updateBrand = catchAsync(async (req: Request, res: Response) => {
+  const result = await brandService.updateBrand(req.params.brandId, req.body)
+  sendResponse(res, {
+    message: ' Brand updated  successfully',
+    statusCode: httpStatus.OK,
+    success: true,
+    data: result,
+  })
+})
 export const brandController = {
   createBrand,
   getBrand,
   getById,
+  updateBrand,
 }

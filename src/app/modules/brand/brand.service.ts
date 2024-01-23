@@ -71,8 +71,13 @@ const getById = async (
   }
 }
 
+const updateBrand = async (id: string, data: Partial<IBrand>) => {
+  const result = await Brand.findByIdAndUpdate(id, data, { new: true })
+  return result
+}
 export const brandService = {
   createBrand,
   getBrand,
   getById,
+  updateBrand,
 }

@@ -94,4 +94,45 @@ router.get('/get-all', brandController.getBrand)
 
 router.get('/getbyid', auth('customer', 'admin'), brandController.getById)
 
+/**
+ * @openapi
+ * /api/v1/brand/${brandId}:
+ *   patch:
+ *     summary: Update brand by brand id
+ *     description: API endpoint to update brand by brand id
+ *     tags: [Brand]
+ *     parameters:
+ *       - name: brandId
+ *         in: path
+ *         description: ID of the brand
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                  name:
+ *                    type: string
+ *                    description: The name of the brand
+ *                  logo:
+ *                    type: string
+ *                    description: The image of the brand
+ *     responses:
+ *       '200':
+ *         description: Brand  updated successfully
+ *       '400':
+ *         description: Bad request, check request body
+ *       '401':
+ *         description: Unauthorized, authentication required
+ *       '404':
+ *         description: Brand not found
+ *
+ */
+
+router.patch('/:brandId', brandController.updateBrand)
+
 export const brandRouter = router
