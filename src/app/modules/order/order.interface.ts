@@ -8,11 +8,11 @@ export type IOrder = {
   products: ExtendedInterface[]
   orderStatus: 'pending' | 'approved' | 'processing' | 'shipped' | 'delivered'
   paymentMethod: 'cash on delivery' | 'ssl-commerce'
-  paymentStatus: 'pending' | 'paid' | 'refunded'
+  paymentStatus: 'pending' | 'paid' | 'refunded' | 'unpaid'
   address: Schema.Types.ObjectId
   totalPrice: number
   discount: number
-  transition_id: string
+  transition_id?: string
   paid: boolean
   shipping: number
 }

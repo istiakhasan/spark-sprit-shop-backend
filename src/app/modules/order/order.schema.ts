@@ -20,7 +20,7 @@ const orderSchema = new Schema<IOrder>(
     },
     paymentStatus: {
       type: String,
-      enum: ['pending', 'paid', 'refunded'],
+      enum: ['pending', 'paid', 'refunded', 'unpaid'],
       required: true,
     },
     address: {
@@ -46,7 +46,6 @@ const orderSchema = new Schema<IOrder>(
     },
     transition_id: {
       type: String,
-      required: true,
     },
     paid: {
       type: Boolean,

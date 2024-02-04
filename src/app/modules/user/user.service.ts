@@ -14,11 +14,13 @@ const createUser = async (data: IUser) => {
   }
   const { userId, role, phone, image } = data
   const isUserExist = await User.findOne({ email: data.email })
+  console.log(isUserExist, 'is user exist ')
   if (isUserExist) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'User already exist')
   }
   //   generate customer id
   const finalId = await genarateCustomerId(data.role)
+
   data.userId = finalId
   const user = await User.create(data)
   const { _id } = user

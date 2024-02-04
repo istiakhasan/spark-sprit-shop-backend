@@ -253,6 +253,10 @@ import auth from '../../middlewares/auth'
 const router = express.Router()
 
 router.post('/create', orderController.createOrder)
+router.post(
+  '/create/paymentWithCashOnDelivery',
+  orderController.paymentWithCashOnDelivery,
+)
 router.get('/getAllOrders', orderController.getAllOrders)
 router.get('/order-summary/:id', orderController.orderSummary)
 router.get(

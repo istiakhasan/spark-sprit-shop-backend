@@ -15,6 +15,17 @@ const createOrder = catchAsync(async (req: Request, res: Response) => {
     data: result,
   })
 })
+const paymentWithCashOnDelivery = catchAsync(
+  async (req: Request, res: Response) => {
+    const result = await orderService.paymentWithCashOnDelivery(req.body)
+    sendResponse(res, {
+      message: 'Order create successfully',
+      statusCode: httpStatus.OK,
+      success: true,
+      data: result,
+    })
+  },
+)
 const paymentSuccess = catchAsync(async (req: Request, res: Response) => {
   const result = await orderService.paymentSuccess(req.params.id)
   if (result) {
@@ -82,4 +93,5 @@ export const orderController = {
   getOrderById,
   getAllOrders,
   updateStatus,
+  paymentWithCashOnDelivery,
 }

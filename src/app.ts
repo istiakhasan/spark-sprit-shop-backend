@@ -8,7 +8,6 @@ import { getBaseUrl } from './helpers/envConfig'
 import swaggerJsDoc from 'swagger-jsdoc'
 import swaggerUi from 'swagger-ui-express'
 const app: Application = express()
-// app.use(cors({ origin: 'https://spark-spirit-shop.vercel.app', credentials: true }))
 app.use(cors({ origin: getBaseUrl(), credentials: true }))
 app.use(cookieParser())
 //parser
@@ -24,11 +23,11 @@ const options = {
     },
     servers: [
       {
-        url: 'https://spart-spirit-shop-backend.vercel.app', // Update with your server URL
+        url: 'https://spart-spirit-shop-backend.vercel.app',
         description: 'Live server',
       },
       {
-        url: 'http://localhost:5000', // Update with your server URL
+        url: 'http://localhost:5000',
         description: 'Local development server',
       },
     ],
@@ -39,8 +38,6 @@ const options = {
 const specs = swaggerJsDoc(options)
 const CSS_URL =
   'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css'
-// Serve Swagger UI
-// app.use('/api-docs', express.static('./node_modules/swagger-ui-dist/'));
 app.use(
   '/api-docs',
   swaggerUi.serve,

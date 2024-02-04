@@ -259,6 +259,55 @@ const updateStatus = async (status: string, id: string, userId: string) => {
   return result
 }
 
+const paymentWithCashOnDelivery = async (data: any) => {
+  const newData = { ...data }
+  newData['address'] = data?.address?._id
+  newData['paymentMethod'] = 'cash on delivery'
+  const transition_id = new ObjectId().toString()
+
+  let result = []
+
+  const session = await mongoose.startSession()
+
+  try {
+    data?.products?.map(async (item: any) => {
+      //@ts-ignore
+      const id = item?._id
+      // find product by _id
+      const findProductQuantity = await Product.findById(id)
+      if (!findProductQuantity) {
+        throw new ApiError(httpStatus.FORBIDDEN, 'Something went wrong')
+      }
+
+      // update product quantity
+      await Product.findByIdAndUpdate(
+        id,
+        {
+          quantity: findProductQuantity?.quantity - item?.purchaseQuantity,
+        },
+        { new: true, session },
+      )
+    })
+    result = await Order.create(
+      [
+        {
+          ...newData,
+          transition_id,
+          paymentStatus: 'unpaid',
+          paid: false,
+        },
+      ],
+      { session },
+    )
+  } catch (error) {
+    await session.abortTransaction()
+    await session.endSession()
+    throw error
+  }
+
+  return result
+}
+
 export const orderService = {
   createOrder,
   paymentSuccess,
@@ -266,4 +315,5 @@ export const orderService = {
   getOrderById,
   getAllOrders,
   updateStatus,
+  paymentWithCashOnDelivery,
 }
